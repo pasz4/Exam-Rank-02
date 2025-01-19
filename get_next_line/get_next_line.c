@@ -3,7 +3,7 @@
 char	*ft_strdup(char *src)
 {
 	char	*dest;
-	int		i;
+	int	i;
 
 	i = 0;
 	while (src[i])
@@ -25,7 +25,7 @@ char	*get_next_line(int fd)
 	char		line[70000];
 	static int	buffer_read;
 	static int 	buffer_pos;
-	int			i;
+	int 		i;
 
 	i = 0;
 	if (fd < 0 || BUFFER_SIZE <= 0)
