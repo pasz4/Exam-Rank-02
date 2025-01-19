@@ -1,80 +1,51 @@
-#include <stdlib.h>
-#include <unistd.h>
 #include <stdarg.h>
+#include <unistd.h>
 
-static void ft_putstr(const char *s, int *count)
+static void ft_put_string(char *str, int *len)
 {
-    if (!s)
-        s = "(null)";
-    while (*s)
-    {
-        write(1, s++, 1);
-        (*count)++;
-    }
+ int i = 0;
+ if (!str)
+  str = "(null)";
+ while (str[i])
+ {
+  *len += write(1, &str[i], 1);
+  i++;
+ }
 }
 
-static void ft_putnbr(int n, int *count)
+static void ft_put_digit(long long int num, int base, int *len)
 {
-    char c;
-
-    if (n == -2147483648)
-    {
-        ft_putstr("-2147483648", count);
-        return;
-    }
-    if (n < 0)
-    {
-        write(1, "-", 1);
-        (*count)++;
-        n = -n;
-    }
-    if (n > 9)
-        ft_putnbr(n / 10, count);
-    c = (n % 10) + '0';
-    write(1, &c, 1);
-    (*count)++;
+ if (num < 0)
+ {
+  num = num * -1;
+  *len += write(1, "-", 1);
+ }
+ if (num >= base)
+  put_digit((num / base), base, len);
+ *len += write(1, &"0123456789abcdef"[num % base], 1);
 }
 
-static void ft_puthex(unsigned int n, int *count)
+int ft_printf(const char *fmt, ...) /* You can find all this function in the manual. "man va_arg", "man 2 va_arg", "man 3 va_arg" */
 {
-    char *hex = "0123456789abcdef";
-
-    if (n >= 16)
-        ft_puthex(n / 16, count);
-    write(1, &hex[n % 16], 1);
-    (*count)++;
-}
-
-int ft_printf(const char *format, ...) /* You can find all this function in the manual. "man va_arg", "man 2 va_arg", "man 3 va_arg" */
-{
-    va_list args;
-    int count = 0;
-
-    va_start(args, format);
-    while (*format)
-    {
-        if (*format == '%' && *(format + 1))
-        {
-            format++;
-            if (*format == 's')
-                ft_putstr(va_arg(args, char *), &count);
-            else if (*format == 'd')
-                ft_putnbr(va_arg(args, int), &count);
-            else if (*format == 'x')
-                ft_puthex(va_arg(args, unsigned int), &count);
-            else
-            {
-                write(1, format, 1);
-                count++;
-            }
-        }
-        else
-        {
-            write(1, format, 1);
-            count++;
-        }
-        format++;
-    }
-    va_end(args);
-    return count;
+ va_list ptr;
+ int i = 0;
+ int len = 0;
+ va_start(ptr, fmt);
+ while (fmt[i])
+ {
+  if ((fmt[i] == '%') && ((fmt[i + 1] == 's') || (fmt[i + 1] == 'd') || (fmt[i + 1] == 'x')))
+  {
+   i++;
+   if (fmt[i] == 's')
+    put_string(va_arg(ptr, char *), &len);
+   else if (fmt[i] == 'd')
+    put_digit((long long int)va_arg(ptr, int), 10, &len);
+   else if (format[i] == 'x')
+    put_digit((long long int)va_arg(ptr, unsigned int), 16, &len);
+  }
+  else
+   len += write(1, &fmt[i], 1);
+  i++;
+ }
+ return (va_end(ptr), len);
 }
