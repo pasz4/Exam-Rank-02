@@ -48,11 +48,3 @@ char	*get_next_line(int fd)
 		return (NULL);
 	return (ft_strdup(line));
 }
-/*
-int main()
-{
-    int fd = open("./txt.txt", O_RDONLY);
-    printf("%s", get_next_line(fd));
-    return (0);
-}
-*/
