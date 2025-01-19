@@ -40,7 +40,7 @@ char	*get_next_line(int fd)
 				break ;
 		}
 		line[i++] = buffer[buffer_pos++];
-		if (buffer[buffer_pos] == '\n')
+		if (buffer[buffer_pos - 1] == '\n' || i >= sizeof(line) - 1)
 			break ;
 	}
 	line[i] = '\0';
