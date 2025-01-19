@@ -1,7 +1,7 @@
 #include <stdarg.h>
 #include <unistd.h>
 
-void put_string(char *str, int *len)
+static void ft_put_string(char *str, int *len)
 {
  int i = 0;
  if (!str)
@@ -13,7 +13,7 @@ void put_string(char *str, int *len)
  }
 }
 
-void put_digit(long long int num, int base, int *len)
+static void ft_put_digit(long long int num, int base, int *len)
 {
  if (num < 0)
  {
